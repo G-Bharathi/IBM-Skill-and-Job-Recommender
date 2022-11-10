@@ -2,9 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
+
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <style>
-          img{
+            img{
             width:100vw;
             height:100vh;
           }
@@ -17,6 +18,25 @@
             background-color: #008B8B;
             color:white;
           }
+          .content-wrapper{
+            width:100vw;
+            height:100vh;
+            background-color:lightseagreen;
+
+          }
+          .details{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+          }
+          .ipt{
+            width:250px;
+            height:44px;
+            border:0px;
+            border-radius: 5px;;
+          }
+
         </style>
     </head>
     <body>
@@ -44,6 +64,13 @@
               </form>
             </div>
           </nav>
-          <img src="Pictures/Job-Search-Checklist.png" alt="job image">
+          <div class="content-wrapper">
+            <div class="details">
+                <h3>Login <span class="glyphicon glyphicon-user"></span> <hr></h3>
+                <input class="ipt" type="email" placeholder="Enter email id"><br>
+                <input class="ipt" type="password" placeholder="Enter password"><br>
+                <input id="submit-btn" type="submit" value="Login">
+            </div>
+          </div>
     </body>
 </html>
