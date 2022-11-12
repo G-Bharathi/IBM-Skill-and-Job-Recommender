@@ -15,7 +15,11 @@ def home():
 @app.route('/login')
 def login():
     return render_template('login.html')
-    
+
+@app.route('/viewjobs')
+def viewjobs():
+    return render_template('viewJob.html')
+
 @app.route('/registerandlogin',methods=['POST'])
 def loginwithdetails():
     name = request.form['name']
