@@ -26,7 +26,12 @@ def apply():
 def viewjobs():
     session['title'] = ''
     session['skills']=''
-    return render_template('viewJob.html')
+    sql = "select * from jobs"
+    prep_stmt = ibm_db.prepare(conn,sql)
+    ibm_db.execute(prep_stmt)
+    values=  ibm_db.fetch_assoc(prep_stmt)
+
+    return render_template('viewJob.html',msg= values)
 
 
 @app.route('/login')
