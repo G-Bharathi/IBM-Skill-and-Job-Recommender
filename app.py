@@ -10,16 +10,22 @@ conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=764264db-9824-4b7c-82df-40d1b1389
 
 @app.route('/')
 def home():
+    session['name'] = ''
     return render_template('home.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/apply')
+def apply():
+    if(session['name']==''):
+        return render_template('login.html',msg="Please login before applying job.")
+    return render_template('apply.html')
 
 @app.route('/viewjobs')
 def viewjobs():
     return render_template('viewJob.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html',msg='')
 @app.route('/registerandlogin',methods=['POST'])
 def loginwithdetails():
     name = request.form['name']
@@ -49,6 +55,7 @@ def welcome():
     values = ibm_db.fetch_assoc(prep_stmt)
     if values:
         session['name'] = values['NAME']
+        session['email'] = email
         return render_template("home.html")
     else:
         session['error'] = "Incorrect email or password!"
