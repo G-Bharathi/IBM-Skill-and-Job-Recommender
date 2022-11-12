@@ -6,8 +6,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Apply Jobs</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="/static/css/viewJob.css">
-    
+        <link rel="stylesheet" href="/static/css/apply.css">
+        <style>
+          #login-img{
+            width:100vw;
+            height:90vh;
+            position:absolute;
+            z-index: -1;
+          }
+          .wrapper{
+            height:80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color:white;
+          }
+          .details{
+            border:0px;
+            height:40px;
+            width:300px;
+            border-radius: 5px;
+          }
+          .btn-clr{
+            background-color: rgb(51, 204, 196);
+          }
+          .btn-clr:hover{
+            background-color: rgb(230, 238, 238);
+          }
+          .btn-seagreen{
+            margin-right:5px;
+            margin-left:5px;
+            color:white;
+            border:2px solid lightseagreen;
+          }
+          .btn-seagreen:hover{
+            color:white;
+            background-color: lightseagreen;
+          }
+          a{
+            color:rgb(40, 42, 53);
+          }
+          a:hover{
+            color:rgb(40, 42, 53);
+          }
+          .containter{
+            display:flex;
+            justify-content:center;
+            align-items:center;   
+            flex-direction:column;
+
+      }
+
+      </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,8 +76,7 @@
                     </a>
                   </div>
                   </nav>
-  
-  
+
                     <form class="container-fluid justify-content-start" action="login">
                       <i class="bi bi-file-person"></i>
                       <button class="btn btn-seagreen me-2" type="submit">Login</button>
@@ -42,7 +92,8 @@
               </div>
             </div>
           </nav>
-        <form action="apply">
+        <div class="container">
+          <form action="apply">
             <div>
                 <label for="name">Name</label>
                 <input type="text" placeholder="Name" value="{{session.name}}" >
@@ -56,6 +107,7 @@
                 <input type="file" value="Upload" >
             </div>
             <input type="submit" value="Apply">
-        </form>
+         </form>
+        </div>
     </body>
 </html>
