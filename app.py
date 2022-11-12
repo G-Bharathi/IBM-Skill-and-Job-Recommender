@@ -12,8 +12,12 @@ conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=764264db-9824-4b7c-82df-40d1b1389
 def home():
     return render_template('home.html')
 
-@app.route('/login',methods=['POST'])
+@app.route('/login')
 def login():
+    return render_template('login.html')
+    
+@app.route('/registerandlogin',methods=['POST'])
+def loginwithdetails():
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
