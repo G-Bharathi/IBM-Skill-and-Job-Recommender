@@ -13,18 +13,25 @@ def home():
     session['name'] = ''
     return render_template('home.html')
 
-@app.route('/apply')
+@app.route('/apply',methods=['POST'])
 def apply():
+    session['apply']='true'
     if(session['name']==''):
         return render_template('login.html',msg="Please login before applying job.")
+    session['title']=request.form['title']
+    session['skills'] = request.form['skill']
     return render_template('apply.html')
 
 @app.route('/viewjobs')
 def viewjobs():
+    session['title'] = ''
+    session['skills']=''
     return render_template('viewJob.html')
+
 
 @app.route('/login')
 def login():
+    session['apply']='false'
     return render_template('login.html',msg='')
 @app.route('/registerandlogin',methods=['POST'])
 def loginwithdetails():
@@ -56,10 +63,12 @@ def welcome():
     if values:
         session['name'] = values['NAME']
         session['email'] = email
+        if session['apply'] == 'true':
+            return render_template('apply.html')
         return render_template("home.html")
     else:
-        session['error'] = "Incorrect email or password!"
-        return render_template("login.html")
+        msg = "Incorrect email or password"
+        return render_template("login.html",msg)
 
 if __name__ == '__main__':  
     app.run(debug=True)
