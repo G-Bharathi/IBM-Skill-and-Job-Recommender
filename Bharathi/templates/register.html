@@ -26,15 +26,10 @@
             border-radius: 5px;
           }
           .btn-clr{
-            background-color: #282A35;
-            color:white;
-            transition:width 3s height 3s;
+            background-color: rgb(51, 204, 196);
           }
           .btn-clr:hover{
-            background-color: #282A35;
-            color:white;
-            width:75px;
-            height:45px;
+            background-color: rgb(230, 238, 238);
           }
           .btn-seagreen{
             margin-right:5px;
@@ -47,13 +42,17 @@
             background-color: lightseagreen;
           }
           a{
-            color:#282A35;
+            color:rgb(40, 42, 53);
+          }
+          a:hover{
+            color:rgb(40, 42, 53);
           }
         </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <div class="container-fluid">
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -68,10 +67,10 @@
                 </nav>
 
 
-                  <form class="container-fluid justify-content-start" action="register">
+                  <form class="container-fluid justify-content-start" action="login">
                     <i class="bi bi-file-person"></i>
+                    <button class="btn btn-seagreen me-2" type="submit">Login</button>
                       &nbsp
-                    <button class="btn btn-seagreen me-2" type="submit">Register</button>
 
                   </form>
 
@@ -84,19 +83,23 @@
           </div>
         </nav>
         <img id="login-img" src="/static/img/bckgrd.jpg" alt="job image">
-        <form class="wrapper" method="post" action="/welcome">
-            <h3>Login</h3>
-            <p>Haven't registered to our website yet <a href="#">Register Now</a></p>
-            <p>{{session.msg}} </p>
+         <form class="wrapper" action="registerandlogin" method="post">
+            <h3>Register</h3>
+            <p>Already have an account <a href="#">Sign in</a></p>
+            <p>{{msg}}</p>
+            <div>
+                <label for="name">Name</label><br>
+                <input class="details" type="text" name="name" placeholder="Name" required>
+              </div>
             <div>
               <label for="email">Email</label><br>
-              <input class="details" type="email" name="email" placeholder="Email">
+              <input class="details" type="email" name="email" placeholder="Email" required>
             </div>
             <div>
               <label for="password">Password</label><br>
-              <input class="details" type="password" name="password" placeholder="Password">
+              <input class="details" type="password" name="password" placeholder="Password" required>
             </div><br>
-            <input class="btn btn-clr" type="submit" value="Login">
-        </form>
+            <input class="btn btn-clr" type="submit" value="Register">
+          </from>
     </body>
 </html>
