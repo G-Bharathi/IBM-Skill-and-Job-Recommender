@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,session
+from flask import Flask,render_template,request,session,redirect
 from flask_session import Session
 import ibm_db
 
@@ -11,33 +11,55 @@ conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=764264db-9824-4b7c-82df-40d1b1389
 @app.route('/')
 def home():
     session['name'] = ''
+    session['email'] = ''
+    session['apply'] = False
+    session['title'] = ''
+    session['skills'] = ''
+    session['company'] = ''
+    session['msg'] = ''
+    session['title'] = ''
+    session['skills'] = ''
     return render_template('home.html')
 
 @app.route('/apply',methods=['POST'])
 def apply():
-    session['apply']='true'
+    session['apply']= True
+    session['title'] = request.form['title']
+    session['skills'] = request.form['skill']
+    session['company'] = request.form['company']
     if(session['name']==''):
         return render_template('login.html',msg="Please login before applying job.")
-    session['title']=request.form['title']
-    session['skills'] = request.form['skill']
     return render_template('apply.html')
 
 @app.route('/viewjobs')
 def viewjobs():
     session['title'] = ''
     session['skills']=''
+    session['msg'] = ''
     sql = "select * from jobs"
-    prep_stmt = ibm_db.prepare(conn,sql)
-    ibm_db.execute(prep_stmt)
-    values=  ibm_db.fetch_assoc(prep_stmt)
-
-    return render_template('viewJob.html',msg= values)
+    stmt = ibm_db.prepare(conn,sql)
+    ibm_db.execute(stmt)
+    values=  ibm_db.fetch_assoc(stmt)
+    result = ''
+    while values != False:
+        result += '<div class="card" style="width:20rem">'
+        result += '<form action="apply" class="card-body" method="post">'
+        result += '<input class="card-title title" name="title" value="'+values['ROLE']+'">'
+        result += '<input class="card-text company" name="company" value="'+values['COMPANY']+'"><br>'
+        result += '<input class="card-text skills" name="skill" value="'+values['SKILLS']+'"><br>'
+        result += '<input type="submit" value="Apply" class="btn btn-primary"></form></div> '
+        values=ibm_db.fetch_assoc(stmt)
+    session['result'] = result
+    if session['name'] == '':
+        return render_template('viewJob.html')
+    return render_template('viewafterlogin.html')
 
 
 @app.route('/login')
 def login():
-    session['apply']='false'
-    return render_template('login.html',msg='')
+    session['apply']= False
+    return render_template('login.html')
+
 @app.route('/registerandlogin',methods=['POST'])
 def loginwithdetails():
     name = request.form['name']
@@ -49,14 +71,17 @@ def loginwithdetails():
     ibm_db.bind_param(prepare_stmt,2,email)
     ibm_db.bind_param(prepare_stmt,3,password)
     ibm_db.execute(prepare_stmt)
-    return render_template('login.html',msg = 'Registration successful')
+    session['msg'] = 'Registration successful'
+    return render_template('login.html')
 
 @app.route('/register')
 def register():
     return render_template('register.html')
 
-@app.route('/welcome',methods=['POST'])
+@app.route('/welcome',methods=['POST','GET'])
 def welcome():
+    if request.method == 'GET':
+        return render_template('welcome.html')
     email = request.form['email']
     password = request.form['password']
     sql = "select name from jobregistration where email=? AND password=?"
@@ -68,12 +93,12 @@ def welcome():
     if values:
         session['name'] = values['NAME']
         session['email'] = email
-        if session['apply'] == 'true':
+        if session['apply']:
             return render_template('apply.html')
-        return render_template("home.html")
+        return render_template("welcome.html")
     else:
-        msg = "Incorrect email or password"
-        return render_template("login.html",msg)
+        session['msg'] = "Incorrect email or password"
+        return redirect("/login")
 
 if __name__ == '__main__':  
     app.run(debug=True)
