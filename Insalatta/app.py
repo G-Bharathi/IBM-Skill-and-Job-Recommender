@@ -64,8 +64,10 @@ def login():
     session['apply']= False
     return render_template('login.html')
 
-@app.route('/registerandlogin',methods=['POST'])
-def loginwithdetails():
+@app.route('/register',methods=['POST','GET'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
@@ -93,9 +95,6 @@ def loginwithdetails():
         session['msg']='Registration successful'
         return render_template('login.html')
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
 
 @app.route('/welcome',methods=['POST','GET'])
 def welcome():
