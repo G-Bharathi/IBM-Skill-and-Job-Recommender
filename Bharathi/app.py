@@ -1,6 +1,6 @@
 import re
 
-from flask import Flask,render_template,request,session
+from flask import Flask,render_template,request,session,redirect
 from flask_session import Session
 import ibm_db
 import os
@@ -39,16 +39,18 @@ def home():
     session['msg'] = ''
     session['title'] = ''
     session['skills'] = ''
+    session['regmsg'] = ''
     return render_template('home.html')
 
 @app.route('/apply',methods=['POST'])
 def apply():
-    session['apply']='True'
+    session['apply']= True
     session['title'] = request.form['title']
     session['skills'] = request.form['skill']
     session['company'] = request.form['company']
     if(session['name']==''):
-        return render_template('login.html',msg="Please login before applying job.")
+        session['msg'] = "Please login before applying job."
+        return render_template('login.html')
     return render_template('apply.html')
 
 @app.route('/viewjobs')
@@ -56,6 +58,7 @@ def viewjobs():
     session['title'] = ''
     session['skills'] = ''
     session['msg'] = ''
+    session['regmsg'] = ''
     sql = "select * from jobs"
     stmt = ibm_db.prepare(conn, sql)
     ibm_db.execute(stmt)
@@ -77,8 +80,8 @@ def viewjobs():
 
 @app.route('/login')
 def login():
-    session['apply'] = False
-    return render_template('login.html',msg='')
+    session['apply']= False
+    return render_template('login.html')
 
 @app.route('/registerandlogin',methods=['POST'])
 def loginwithdetails():
@@ -115,11 +118,13 @@ def loginwithdetails():
 def register():
     return render_template('register.html')
 
-@app.route('/welcome',methods=['POST'])
+@app.route('/welcome',methods=['POST','GET'])
 def welcome():
+    if request.method == 'GET':
+        return render_template('welcome.html')
     email = request.form['email']
     password = request.form['password']
-    # ----------- tablename = jobregister=----------------
+    #---------table name = jobregister -----------------------
     sql = "select name from jobregister where email=? AND password=?"
     prep_stmt = ibm_db.prepare(conn, sql)
     ibm_db.bind_param(prep_stmt, 1, email)
@@ -129,12 +134,12 @@ def welcome():
     if values:
         session['name'] = values['NAME']
         session['email'] = email
-        if session['apply']=='true':
-            return render_template("apply.html")
-        return render_template("home.html")
+        if session['apply']:
+            return render_template('apply.html')
+        return render_template("welcome.html")
     else:
-        session['error'] = "Incorrect email or password!"
-        return render_template("login.html")
+        session['msg'] = "Incorrect email or password"
+        return redirect("/login")
 
 
 if __name__ == '__main__':

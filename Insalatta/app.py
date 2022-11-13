@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request,session,redirect
 from flask_session import Session
 import ibm_db
+import re
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -19,6 +20,7 @@ def home():
     session['msg'] = ''
     session['title'] = ''
     session['skills'] = ''
+    session['regmsg'] = ''
     return render_template('home.html')
 
 @app.route('/apply',methods=['POST'])
@@ -28,7 +30,8 @@ def apply():
     session['skills'] = request.form['skill']
     session['company'] = request.form['company']
     if(session['name']==''):
-        return render_template('login.html',msg="Please login before applying job.")
+        session['msg'] = "Please login before applying job."
+        return render_template('login.html')
     return render_template('apply.html')
 
 @app.route('/viewjobs')
@@ -36,6 +39,7 @@ def viewjobs():
     session['title'] = ''
     session['skills']=''
     session['msg'] = ''
+    session['regmsg'] = ''
     sql = "select * from jobs"
     stmt = ibm_db.prepare(conn,sql)
     ibm_db.execute(stmt)
@@ -65,14 +69,29 @@ def loginwithdetails():
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
-    sql = 'INSERT INTO jobregistration values(?,?,?)'
-    prepare_stmt = ibm_db.prepare(conn,sql)
-    ibm_db.bind_param(prepare_stmt,1,name)
-    ibm_db.bind_param(prepare_stmt,2,email)
-    ibm_db.bind_param(prepare_stmt,3,password)
-    ibm_db.execute(prepare_stmt)
-    session['msg'] = 'Registration successful'
-    return render_template('login.html')
+    sql="SELECT * FROM jobregistration WHERE name=? "
+    stmt=ibm_db.prepare(conn,sql)
+    ibm_db.bind_param(stmt,1,name)
+    ibm_db.execute(stmt)
+    account =ibm_db.fetch_assoc(stmt)
+    if account:
+        session['regmsg']='Account already exists !'
+        return render_template('register.html')
+    elif not re.match(r'[^@]+@[^@]+\.[^@]+',email):
+        session['regmsg']='Invalid email Address'
+        return render_template('register.html')
+    elif not re.match(r'[A-Za-z0-9]+',name):
+        session['regmsg']='Name must contain atleast one character and Number'
+        return render_template('register.html')
+    else:
+        sql = 'INSERT INTO jobregistration values(?,?,?)'
+        prepare_stmt = ibm_db.prepare(conn,sql)
+        ibm_db.bind_param(prepare_stmt,1,name)
+        ibm_db.bind_param(prepare_stmt,2,email)
+        ibm_db.bind_param(prepare_stmt,3,password)
+        ibm_db.execute(prepare_stmt)
+        session['msg']='Registration successful'
+        return render_template('login.html')
 
 @app.route('/register')
 def register():
