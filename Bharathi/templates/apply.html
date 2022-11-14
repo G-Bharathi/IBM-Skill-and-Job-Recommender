@@ -43,7 +43,7 @@
           </nav>
 <!--        <img id="login-img" src="/static/img/bckgrd.jpg" alt="job image">-->
         <div class="container">
-            <form action="apply" class="apply-container">
+            <form action="viewjobs" class="apply-container">
                 <h4>Application Details</h4>
                 <table>
                     <tr>
@@ -72,13 +72,20 @@
                     </tr>
                     <tr>
                         <td class="ele">Resume</td>
-                        <td><input class="fields" type="file" value="Upload"></td>
+                        <td><input type="file" value="Upload" ></td>
                     </tr>
 
                 </table><br>
-                <input class="btn btn-submit" type="submit" value="Apply">
+                <input class="btn btn-submit" type="submit" value="Apply" onclick="myFun()">
             </form>
         </div>
+
+     <script>
+        function myFun(){
+           alert("Mail Send  Sucessfully");
+        }
+    </script>
     </body>
+
 </html>
 

@@ -83,8 +83,10 @@ def login():
     session['apply']= False
     return render_template('login.html')
 
-@app.route('/registerandlogin',methods=['POST'])
-def loginwithdetails():
+@app.route('/register',methods=['POST','GET'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
     name = request.form['name']
     email = request.form['email']
     password = request.form['password']
@@ -95,14 +97,14 @@ def loginwithdetails():
     ibm_db.execute(stmt)
     account =ibm_db.fetch_assoc(stmt)
     if account:
-        session['msg']='Account already exists !'
-        return render_template('register.html')
+        msg='Account already exists !'
+        return render_template('register.html',msg=msg)
     elif not re.match(r'[^@]+@[^@]+\.[^@]+',email):
-        session['msg']='Invalid email Address'
-        return render_template('register.html')
+        msg='Invalid email Address'
+        return render_template('register.html',msg=msg)
     elif not re.match(r'[A-Za-z0-9]+',name):
-        session['msg']='Name must contain atleast one character and Number'
-        return render_template('register.html')
+        msg='Name must contain atleast one character and Number'
+        return render_template('register.html',msg=msg)
     else:
         # ----------- tablename = jobregister=----------------
         sql = 'INSERT INTO jobregister values(?,?,?)'
@@ -114,9 +116,6 @@ def loginwithdetails():
         session['msg']='Registration successful'
         return render_template('login.html')
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
 
 @app.route('/welcome',methods=['POST','GET'])
 def welcome():

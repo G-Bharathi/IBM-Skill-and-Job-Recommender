@@ -24,12 +24,16 @@
                 </nav>
 
 
-                  <form class="container-fluid justify-content-start" action="login">
-                    <i class="bi bi-file-person"></i>
+                 <div class="container-fluid justify-content-start align" >
+                  <form action="/">
+                    <button class="btn btn-seagreen me-2" type="submit">Home</button>
+                </form>
+                <form action="login">
                     <button class="btn btn-seagreen me-2" type="submit">Login</button>
-                      &nbsp
+                </form>
 
-                  </form>
+              </div>
+
 
               <form class="d-flex" >
                 <input class="form-control me-2" type="search" placeholder="Search Jobs" aria-label="Search">
@@ -39,8 +43,8 @@
             </div>
           </div>
         </nav>
-        <img id="login-img" src="/static/img/bckgrd.jpg" alt="job image">
-         <form class="wrapper" action="registerandlogin" method="post">
+        <img id="login-img" src="https://jobs.s3.eu.cloud-object-storage.appdomain.cloud/bckgrd.jpg" alt="job image">
+         <form class="wrapper" action="register" method="post">
             <h3>Register</h3>
             <p>Already have an account <a href="#">Sign in</a></p>
             <p>{{msg}}</p>

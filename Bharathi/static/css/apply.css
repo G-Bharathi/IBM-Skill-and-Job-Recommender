@@ -53,7 +53,9 @@ a:hover{
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    margin-top:50px;
+    margin-top:0px;
+    background-color:lightseagreen;
+    padding-bottom:50px;
 }
 .apply-container{
     display:flex;
@@ -93,6 +95,7 @@ h4{
 }
 .btn{
     color:white;
+
 }
 .btn:hover{
     color:white;
@@ -102,7 +105,8 @@ h4{
 .btn-submit{
     width:100px;
     height:42px;
-    background-color:lightseagreen;
+    background-color:white;
+    color:black
 }
 .btn-submit:hover{
     background-color:darkcyan;

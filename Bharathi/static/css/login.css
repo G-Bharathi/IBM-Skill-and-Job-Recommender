@@ -42,3 +42,8 @@
 a{
   color:#282A35;
 }
+.align{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}

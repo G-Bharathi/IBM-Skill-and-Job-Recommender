@@ -45,3 +45,8 @@ a{
 a:hover{
   color:rgb(40, 42, 53);
 }
+.align{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
